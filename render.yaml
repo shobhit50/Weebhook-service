@@ -48,6 +48,6 @@ services:
   - type: redis
     name: celery-redis
     region: ohio
-    plan: starter
+    plan: free
     maxmemoryPolicy: noeviction
     ipAllowList: []
