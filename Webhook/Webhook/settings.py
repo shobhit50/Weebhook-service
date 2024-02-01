@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,16 +76,29 @@ WSGI_APPLICATION = 'Webhook.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+#  Database localhost:27017
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'Web_hook',
+#         'ENFORCE_SCHEMA': False,
+#         'CLIENT': {
+#             'host': 'localhost:27017', 
+#         }
+#     }
+# }
+
+# database for production
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'Web_hook',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'localhost:27017', 
+            'ENGINE': 'djongo',
+            'NAME': 'Django',
+            'ENFORCE_SCHEMA': False,
+            'CLIENT': {
+                'host': f'mongodb+srv://shobhit:{os.getenv('DB_PASS')}@cluster0.snn3wbn.mongodb.net/Django?retryWrites=true&w=majority'
+            }  
         }
-    }
 }
 
 
@@ -131,8 +145,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
 task_serializer = 'json'
 result_serializer = 'json'
 accept_content = ['application/json']
