@@ -1,7 +1,7 @@
 services:
   - type: worker
     name: celery-worker
-    region: <YOUR_REGION>
+    region: ohio
     runtime: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "celery -A Webhook worker --loglevel=info"
@@ -16,15 +16,13 @@ services:
 
   - type: web
     name: django-app
-    region: <YOUR_REGION>
+    region: ohio
     runtime: python
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn Webhook.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: Webhook.settings
-      - key: SECRET_KEY
-        fromFile: secret_key.txt
       - key: CELERY_BROKER_URL
         fromService:
           name: celery-redis
@@ -33,7 +31,7 @@ services:
 
   - type: web
     name: celery-flower
-    region: <YOUR_REGION>
+    region: ohio
     plan: free
     runtime: python
     buildCommand: "pip install -r requirements.txt"
@@ -49,7 +47,7 @@ services:
 
   - type: redis
     name: celery-redis
-    region: <YOUR_REGION>
+    region: ohio
     plan: starter
     maxmemoryPolicy: noeviction
     ipAllowList: []
