@@ -12,10 +12,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
+
+USE_CELERY = os.getenv('USE_CELERY') == 'True'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -145,20 +150,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # celery settings
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 task_serializer = 'json'
 result_serializer = 'json'
 accept_content = ['application/json']
-broker_connection_retry_on_startup = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 broker_connection_max_retries = 5
 
-
-# redis-cli
-
-
-
-# python manage.py showmigrations
-# python manage.py migrate myfirstapp  zero
-# python manage.py makemigrations
-# python manage.py migrate
